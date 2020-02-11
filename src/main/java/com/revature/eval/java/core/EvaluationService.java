@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +15,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String reverse(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		// see if string is null
+		if (string == null) {
+			return null;
+		}
+
+		char[] original = string.toCharArray();
+
+		// flips elements at indexes begin and end
+		for (int begin = 0, end = string.length() - 1; begin < end; begin++, end--) {
+			char index = original[begin];
+			original[begin] = original[end];
+			original[end] = index;
+		}
+
+		return String.copyValueOf(original);
+
 	}
 
 	/**
@@ -27,8 +42,18 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+		String[] arr = phrase.split("[^A-Za-z]+"); // split phrase into words and puts into string array
+		StringBuffer buff = new StringBuffer();
+
+		// takes each string and logs each first letter into new string
+		for (int i = 0, length = arr.length; i < (length); i++) {
+			String acro = arr[i];
+			buff.append(acro.charAt(0));
+		}
+
+		String finalAcro = buff.toString(); // converts string buffer to string so we can return the value
+		return finalAcro.toUpperCase();
 	}
 
 	/**
@@ -81,18 +106,30 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			// checks if all sides are the same
+			if (sideOne == sideTwo && sideTwo == sideThree) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			// checks if at least 2 sides are the same
+			if (sideOne == sideTwo || sideTwo == sideThree || sideThree == sideOne) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			// checks if each side is different from all other sides
+			if (sideOne != sideTwo && sideTwo != sideThree && sideThree != sideOne) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 	}
@@ -113,8 +150,76 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		// makes sure string is valid first
+		if (string.contains(" ") || string == null) {
+			System.out.println("Invalid word, you can't have a blank space");
+			return 0;
+		}
+
+		int sum = 0;
+
+		// cycles through string and calculates value of each letter
+		for (int i = 0; i < string.length(); i++) {
+
+			char letter = string.charAt(i);
+			char finalLetter = Character.toLowerCase(letter);
+
+			// checks each letter to get its points
+			switch (finalLetter) {
+			case 'a':
+			case 'e':
+			case 'i':
+			case 'o':
+			case 'u':
+			case 'l':
+			case 'n':
+			case 'r':
+			case 's':
+			case 't':
+				sum += 1;
+				break;
+
+			case 'd':
+			case 'g':
+				sum += 2;
+				break;
+
+			case 'b':
+			case 'c':
+			case 'm':
+			case 'p':
+				sum += 3;
+				break;
+
+			case 'f':
+			case 'h':
+			case 'v':
+			case 'w':
+			case 'y':
+				sum += 4;
+				break;
+
+			case 'k':
+				sum += 5;
+				break;
+
+			case 'j':
+			case 'x':
+				sum += 8;
+				break;
+
+			case 'q':
+			case 'z':
+				sum += 10;
+				break;
+
+			default:
+				// if word contains non alpha characters, throws exception
+				throw new IllegalArgumentException("The word does not contain only letters");
+			}
+		}
+
+		return sum;
 	}
 
 	/**
@@ -149,8 +254,23 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+		String digits = string.replaceAll("[^0-9]", ""); // removes all non-numeric characters
+		StringBuffer finalDigits = new StringBuffer(digits); // converts new string into StringBuffer
+
+		// checks if number starts with 1 and is longer than 10 digits
+		if (digits.charAt(0) == 1 && digits.length() > 10) {
+			finalDigits.deleteCharAt(0);
+		} else if (digits.length() == 10) {
+
+		} else {
+			throw new IllegalArgumentException(); // throws exception if longer than 11 digits
+		}
+		if (digits.charAt(4) == 1 || digits.charAt(0) == 1) {
+			throw new IllegalArgumentException( // if number contains (1)xx(1)xx xxxx, throws exception
+					"Invalid phone number, cannot have a 1 to begin first two sets of 3 digits");
+		}
+		return digits = finalDigits.toString();
 	}
 
 	/**
@@ -164,6 +284,7 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
+
 		return null;
 	}
 
@@ -244,7 +365,64 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+
+		String lower = string.toLowerCase();
+		int i = 0;
+		boolean boolVowel = true;
+		String[] wordArray = lower.split("\\s+");
+		StringBuffer pigEnd = new StringBuffer(), finalMessage = new StringBuffer();
+		StringBuffer pigWord = new StringBuffer(lower);
+
+		// need to cycle thru word array, rn just doing first word (length) times
+
+		try {
+
+			for (int j = 0; j < wordArray.length; j++) {
+
+				while (boolVowel) {
+
+					if (lower.charAt(i) != 'a' && lower.charAt(i) != 'e' && lower.charAt(i) != 'i'
+							&& lower.charAt(i) != 'o' && lower.charAt(i) != 'u') {
+						if (lower.charAt(i) == 'q') {
+							if (lower.charAt(i + 1) == 'u') {
+								pigEnd.append(lower.charAt(i));
+								pigEnd.append(lower.charAt(i + 1));
+								pigWord.deleteCharAt(0);
+								pigWord.deleteCharAt(0);
+							}
+						} else {
+							pigEnd.append(lower.charAt(i));
+							pigWord.deleteCharAt(0);
+						}
+
+					} else {
+						pigEnd.append("ay");
+						boolVowel = false;
+					}
+					i++;
+				}
+
+				pigWord.append(pigEnd);
+
+				if (j < wordArray.length - 1) {
+					pigWord.append(" ");
+				}
+
+				String temp = new String(pigWord);
+				wordArray[j] = temp;
+
+			}
+
+			for (int k = 0; k < wordArray.length; k++) {
+				finalMessage.append(wordArray[k]);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return finalMessage.toString();
+		// return pigWord.toString();
 	}
 
 	/**
@@ -263,8 +441,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+
+		String stringOfInts = new String();
+		stringOfInts = Integer.toString(input); // convert input to string
+		int sum = 0;
+
+		// sums up each digit raised to the number of digits
+		for (int i = 0; i < stringOfInts.length(); i++) {
+			char j = stringOfInts.charAt(i); // pulls each digit as a char
+			int x = Character.getNumericValue(j); // converts the char to int
+			sum += ((int) Math.pow(x, stringOfInts.length())); // performs math to get Armstrong number
+		}
+
+		if (sum == input) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	/**
@@ -278,8 +472,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+		long x = l; // create temp variable to change while unaffecting original
+		List<Long> factors = new ArrayList<Long>(); // create list containing type long
+
+		// start testing factors at 2 and increase when i is no longer a factor
+		for (long i = 2; i <= x; i++) {
+
+			// log i if it is a factor of l
+			while (x % i == 0) {
+				factors.add(i);
+				x /= i;
+			}
+
+		}
+		return factors;
 	}
 
 	/**
@@ -318,6 +525,7 @@ public class EvaluationService {
 
 		public String rotate(String string) {
 			// TODO Write an implementation for this method declaration
+
 			return null;
 		}
 
@@ -413,13 +621,43 @@ public class EvaluationService {
 	 */
 	public boolean isValidIsbn(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		string = string.toLowerCase();
+		string = string.replaceAll(" ", "");
+		string = string.replaceAll("-", "");
+		if (string.contains("[^0-9x]")) {
+			return false;
+		} else {
+			
+			int[] intArr = new int[string.length()];
+			
+			for (int i = 0; i < intArr.length - 1; i++) {
+				if (string.charAt(i) == 'x') {
+					intArr[i] = 10;
+				} else {
+				intArr[i] = string.charAt(i);
+				}
+			}
+			
+			int z = intArr.length;
+			int sum = 0;
+			for (int j = 0; j < intArr.length - 1; j++) {
+				sum += (intArr[j] * z);
+				z--;
+			}
+			if (sum % 11 == 0) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
 	}
 
 	/**
-	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
-	 * gramma, "every letter") is a sentence using every letter of the alphabet at
-	 * least once. The best known English pangram is:
+	 * 16. Determine if a sentence is a pangram. A pangram (Greek: Ï€Î±Î½
+	 * Î³Ï�Î¬Î¼Î¼Î±, pan gramma, "every letter") is a sentence using every letter of
+	 * the alphabet at least once. The best known English pangram is:
 	 * 
 	 * The quick brown fox jumps over the lazy dog.
 	 * 
@@ -431,6 +669,19 @@ public class EvaluationService {
 	 */
 	public boolean isPangram(String string) {
 		// TODO Write an implementation for this method declaration
+		String lower = string.toLowerCase();
+		if (lower == "") {
+			return false;
+		} else if (lower.contains("a") && lower.contains("b") && lower.contains("c") && lower.contains("d")
+				&& lower.contains("e") && lower.contains("f") && lower.contains("g") && lower.contains("h")
+				&& lower.contains("i") && lower.contains("j") && lower.contains("k") && lower.contains("l")
+				&& lower.contains("m") && lower.contains("n") && lower.contains("o") && lower.contains("p")
+				&& lower.contains("q") && lower.contains("r") && lower.contains("s") && lower.contains("t")
+				&& lower.contains("u") && lower.contains("v") && lower.contains("w") && lower.contains("x")
+				&& lower.contains("y") && lower.contains("z")) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -444,6 +695,7 @@ public class EvaluationService {
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
 		// TODO Write an implementation for this method declaration
+
 		return null;
 	}
 
@@ -503,7 +755,43 @@ public class EvaluationService {
 	 */
 	public boolean isLuhnValid(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		boolean pass = true;
+
+		String condensed = string.replaceAll(" ", ""); // remove white space
+
+		// invalidate number if contains non numeric char
+		if (condensed.contains("[^0-9]") == false) {
+			int sum = 0;
+			int[] intArr = new int[condensed.length()]; // declare array to contain condensed number
+
+			// convert condensed string to array
+			for (int j = 0; j < condensed.length() - 1; j++) {
+				intArr[j] = condensed.charAt(j);
+			}
+
+			int placeholder = 1;
+			// traverse array, double every other number, then sum all the numbers
+			for (int i = intArr.length - 1; i >= 0; i--) { // error probably within this for loop
+				if (placeholder % 2 == 0) {
+					int x = intArr[i];
+					x *= 2;
+					if (x > 10) {
+						x -= 9;
+					}
+					intArr[i] = x;
+				}
+				sum += intArr[i]; // add all numbers from array
+				placeholder += 1;
+			}
+			if (sum % 10 != 0) { // fail if sum of numbers isn't divisible by 10
+				pass = !pass;
+			}
+			return pass;
+		} else {
+
+			return false;
+		}
+
 	}
 
 	/**
